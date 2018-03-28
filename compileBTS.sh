@@ -20,7 +20,7 @@ if [ $UPDATE -eq 0 ]; then
 ##################################################################################################
    rm -rf * .*
    echo "Clone $PROJECT project..."   
-   if [ "$BRANCH" -eq "" ]; then
+   if [ ! $BRANCH ]; then
       time git clone $PROJECT #defaults to master
    else
       time git clone $PROJECT -b $BRANCH #switches to specified branch/tag
