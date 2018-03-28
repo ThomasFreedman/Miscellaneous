@@ -19,8 +19,12 @@ if [ $UPDATE -eq 0 ]; then
 # Clone the TESTNET project
 ##################################################################################################
    rm -rf * .*
-   echo "Clone $PROJECT project..."
-   time git clone $PROJECT
+   echo "Clone $PROJECT project..."   
+   if [ "$BRANCH" -eq "" ]; then
+      time git clone $PROJECT
+   else
+      time git clone $PROJECT -b $BRANCH
+   fi
    time git submodule update --init --recursive
    # these were added to build non-master branch code -- provided by abitmore
    git fetch origin
