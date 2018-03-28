@@ -21,33 +21,37 @@ if [ $UPDATE -eq 0 ]; then
    rm -rf * .*
    echo "Clone $PROJECT project..."   
    if [ "$BRANCH" -eq "" ]; then
-      time git clone $PROJECT
+      time git clone $PROJECT #defaults to master
    else
-      time git clone $PROJECT -b $BRANCH
+      time git clone $PROJECT -b $BRANCH #switches to specified branch/tag
    fi
-   time git submodule update --init --recursive
+   # time git submodule update --init --recursive - This will fail unless inside the project folder. Already called below
    # these were added to build non-master branch code -- provided by abitmore
-   git fetch origin
-   git checkout origin/release
-   git submodule update --init --recursive
-   git submodule sync --recursive
-   git submodule update --init --recursive
-   cmake
-   exit  # Normally would not be here, and would finish below
+   # git fetch origin - redundant. You've just cloned the entire repo. Fetch is useful to update when cloned originally in the past
+   # git checkout origin/release - redundant. You've already specified branch/tag in the -b argument
+   # git submodule update --init --recursive This will fail unless inside the project folder. Already called below
+   # git submodule sync --recursive This will fail unless inside the project folder. Already called below
+   # git submodule update --init --recursive This will fail unless inside the project folder. Already called below
+   # cmake Not needed here
+   # exit  # Normally would not be here, and would finish below
+   cd $SUB #so we're at the same cwd when exiting the conditional
 else
 ##################################################################################################
 # Just get the latest or tagged / commit changes
 ##################################################################################################
+   cd $SUB #need to be inside project folder to run teh following
    echo "Updating source from git..."
-   git fetch
-   time git checkout $TAG
-   time git pull origin $TAG
+   git fetch #fetches list of latest tags/branches
+   time git checkout $TAG #checks out specified branch/tag
+   time git pull origin $TAG #redundant here(fetch already does this job) but doesn't hurt
 fi
 ##################################################################################################
 # Build the GRAPHENE witness node and CLI wallet.                                        #
 ##################################################################################################
-cd $SUB
-time git submodule update --init --recursive
+
+time git submodule update --init --recursive 
+time git submodule sync --recursive 
+time git submodule update --init --recursive #normally not needed but was necessary last time. doesnt hurt so leave it here
 cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE .
 time make
 
