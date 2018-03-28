@@ -34,12 +34,12 @@ if [ $UPDATE -eq 0 ]; then
    # git submodule update --init --recursive This will fail unless inside the project folder. Already called below
    # cmake Not needed here
    # exit  # Normally would not be here, and would finish below
-   cd $SUB #so we're at the same cwd when exiting the conditional
-else
+fi
+cd $SUB 
+if [ $UPDATE -eq 1 ]; then
 ##################################################################################################
 # Just get the latest or tagged / commit changes
-##################################################################################################
-   cd $SUB #need to be inside project folder to run teh following
+##################################################################################################   
    echo "Updating source from git..."
    git fetch #fetches list of latest tags/branches
    time git checkout $TAG #checks out specified branch/tag
