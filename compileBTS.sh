@@ -43,7 +43,7 @@ else
    echo "Updating source from git..."
    git fetch #fetches list of latest tags/branches
    time git checkout $TAG #checks out specified branch/tag
-   time git pull origin $TAG #redundant here(fetch already does this job) but doesn't hurt
+   time git pull #redundant here(fetch already does this job) but doesn't hurt
 fi
 ##################################################################################################
 # Build the GRAPHENE witness node and CLI wallet.                                        #
